@@ -2,11 +2,7 @@ package driver
 
 import (
 	_gorm "github.com/mazezen/ginframe/server-common/pkg/gorm"
-	_leveldb "github.com/mazezen/ginframe/server-common/pkg/leveldb"
-	_mongo "github.com/mazezen/ginframe/server-common/pkg/mongo"
 	_redis "github.com/mazezen/ginframe/server-common/pkg/redis"
-	leveldb1 "github.com/mazezen/leveldb"
-	"go.mongodb.org/mongo-driver/mongo"
 	"gopkg.in/redis.v5"
 	"gorm.io/gorm"
 )
@@ -28,18 +24,4 @@ func CreateRedis(addr, pass string, rdb int) (*redis.Client, error) {
 		return nil, err
 	}
 	return rd, nil
-}
-
-// InitMongo 初始化mongo
-func InitMongo(addr string) (*mongo.Client, error) {
-	mg, err := _mongo.InitMongoDb(addr)
-	if err != nil {
-		return nil, err
-	}
-	return mg, nil
-}
-
-// InitLevelDb init level db
-func InitLevelDb(path string) *leveldb1.LevelDB {
-	return _leveldb.InitLevelDb(path)
 }

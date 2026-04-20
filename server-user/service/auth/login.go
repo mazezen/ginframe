@@ -3,6 +3,7 @@ package auth
 import (
 	"errors"
 	"fmt"
+
 	"github.com/dgrijalva/jwt-go"
 	_jwt "github.com/mazezen/ginframe/server-common/pkg/jwt"
 	"github.com/mazezen/ginframe/server-common/utils/encry"
@@ -10,20 +11,21 @@ import (
 	"github.com/mazezen/ginframe/server-user/global"
 	"github.com/mazezen/ginframe/server-user/input"
 	out2 "github.com/mazezen/ginframe/server-user/out"
-	"github.com/mazezen/ginframe/server-user/ulogger"
+	"github.com/mazezen/golog"
+
 	"time"
 )
 
 func LoginService(param *input.LoginInput) (*out2.LoginOut, error) {
 	u, err := auth.FindUserByUsername(param.Username)
 	if err != nil {
-		ulogger.UserLogger.Error(fmt.Sprintf("username: %s 账号不存在", param.Username))
+		golog.Logger.Error(fmt.Sprintf("username: %s 账号不存在", param.Username))
 		return nil, errors.New(fmt.Sprintf("username: %s 账号不存在", param.Username))
 	}
 
 	err = encry.ComparePassword(u.Password, param.Password)
 	if err != nil {
-		ulogger.UserLogger.Error(fmt.Sprintf("username: %s 密码错误", param.Username))
+		golog.Logger.Error(fmt.Sprintf("username: %s 密码错误", param.Username))
 		return nil, errors.New(fmt.Sprintf("username: %s 密码错误", param.Username))
 	}
 
@@ -37,7 +39,7 @@ func LoginService(param *input.LoginInput) (*out2.LoginOut, error) {
 
 	token, err := instance.GenerateToken(claims)
 	if err != nil {
-		ulogger.UserLogger.Error(fmt.Sprintf("username: %s 签发token失败", param.Username))
+		golog.Logger.Error(fmt.Sprintf("username: %s 签发token失败", param.Username))
 		return nil, errors.New(fmt.Sprintf("username: %s 签发token失败", param.Username))
 	}
 

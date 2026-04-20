@@ -4,14 +4,14 @@ import (
 	"github.com/mazezen/ginframe/server-common/utils/wtime"
 	"github.com/mazezen/ginframe/server-user/daos/account"
 	out2 "github.com/mazezen/ginframe/server-user/out"
-	"github.com/mazezen/ginframe/server-user/ulogger"
+	"github.com/mazezen/golog"
 	"go.uber.org/zap"
 )
 
 func UserListService(pageNum, pageSize int64) (int64, []*out2.Users) {
 	count, users, err := account.UserList(pageNum, pageSize)
 	if err != nil {
-		ulogger.UserLogger.Error("查询管理员账号列表失败, err: ", zap.Error(err))
+		golog.Logger.Error("查询管理员账号列表失败, err: ", zap.Error(err))
 		return 0, nil
 	}
 
