@@ -5,6 +5,11 @@ package boot
 import (
 	"flag"
 	"fmt"
+	"io"
+	"log"
+	"os"
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mazezen/ginframe/server-common/config"
 	_const "github.com/mazezen/ginframe/server-common/const"
@@ -15,12 +20,8 @@ import (
 	"github.com/mazezen/ginframe/server-user/daos/serverDao"
 	"github.com/mazezen/ginframe/server-user/global"
 	_rpc "github.com/mazezen/ginframe/server-user/rpc"
-	"github.com/mazezen/ginframe/server-user/ulogger"
+	"github.com/mazezen/golog"
 	"go.uber.org/zap"
-	"io"
-	"log"
-	"os"
-	"strings"
 )
 
 var (
@@ -53,6 +54,7 @@ func init() {
 		_process.GroRuntimeMaxCpu()
 	}
 	assignment()
+	golog.NewLogger(golog.WithLoggerFilePath(LoggerPath), golog.WithLoggerConsole(true))
 	initDB()
 	nacosRF.InitNacos(global.Config.Nacos)
 	setUserServer()
@@ -78,7 +80,6 @@ func assignment() {
 }
 
 func initDB() {
-	InitLog(LoggerPath)
 	InitDb(MysqlDbDsn, MaxOpenConn, MaxIdleConn)
 	InitRedis(RedisAddr, RedisPassword, RedisDb)
 	InitMongo(MongoAddr)
@@ -93,12 +94,12 @@ func setUserServer() {
 	ip := _ip.GetIp()
 	server, err := serverDao.CheckIpIsNewServer(ip, _const.ServerNameU)
 	if err != nil {
-		ulogger.UserLogger.Error("==========> user服务初始化,检测是否为新服务失败 <==========\n",
+		golog.Logger.Error("==========> user服务初始化,检测是否为新服务失败 <==========\n",
 			zap.String("ip", ip), zap.Error(err))
 		os.Exit(1)
 	}
 	if server.Id == 0 {
-		ulogger.UserLogger.Error("==========> user服务初始化,库中服务未找到 <==========\n",
+		golog.Logger.Error("==========> user服务初始化,库中服务未找到 <==========\n",
 			zap.String("ip", ip), zap.Error(err))
 		os.Exit(1)
 	}

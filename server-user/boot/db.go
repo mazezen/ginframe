@@ -3,7 +3,8 @@ package boot
 import (
 	"github.com/mazezen/ginframe/server-common/driver"
 	"github.com/mazezen/ginframe/server-user/core"
-	"github.com/mazezen/ginframe/server-user/ulogger"
+	"github.com/mazezen/golog"
+
 	"log"
 )
 
@@ -15,7 +16,7 @@ func InitDb(dbDsn string, maxOpenConn, maxIdleConn int) {
 	}
 	core.SetMysql(gdb)
 
-	ulogger.UserLogger.Info("🚀🚀🚀🚀🚀🚀mysql success...🚀🚀🚀🚀🚀🚀")
+	golog.Logger.Info("🚀🚀🚀🚀🚀🚀mysql success...🚀🚀🚀🚀🚀🚀")
 }
 
 // InitRedis init redis
@@ -26,7 +27,7 @@ func InitRedis(addr, pass string, rdb int) {
 	}
 	core.SetRedis(rd)
 
-	ulogger.UserLogger.Info("🚀🚀🚀🚀🚀🚀redis success...🚀🚀🚀🚀🚀🚀")
+	golog.Logger.Info("🚀🚀🚀🚀🚀🚀redis success...🚀🚀🚀🚀🚀🚀")
 }
 
 // InitMongo init mongodb
@@ -36,7 +37,7 @@ func InitMongo(addr string) {
 		log.Fatalf("Create mongodb client err: %v\n", err)
 	}
 	core.SetMongo(mongo)
-	ulogger.UserLogger.Info("🚀🚀🚀🚀🚀🚀 mongodb success...🚀🚀🚀🚀🚀🚀")
+	golog.Logger.Info("🚀🚀🚀🚀🚀🚀 mongodb success...🚀🚀🚀🚀🚀🚀")
 }
 
 // InitLevelDb init leveldb
@@ -44,5 +45,5 @@ func InitLevelDb(path string) {
 	ldb := driver.InitLevelDb(path)
 	core.SetLevelDB(ldb)
 
-	ulogger.UserLogger.Info("🚀🚀🚀🚀🚀🚀levedb success...🚀🚀🚀🚀🚀🚀")
+	golog.Logger.Info("🚀🚀🚀🚀🚀🚀levedb success...🚀🚀🚀🚀🚀🚀")
 }
